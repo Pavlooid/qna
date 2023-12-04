@@ -1,7 +1,6 @@
 class AnswersController < ApplicationController
 
   before_action :find_question, only: %i[show new create]
-  before_action :find_answer, only: %i[show edit update destroy]
 
   def show; end
 
@@ -9,9 +8,9 @@ class AnswersController < ApplicationController
     @answers = Answer.all
   end
 
-  def new
-    @answer = Answer.new
-  end
+  def new; end
+
+  def edit; end
 
   def create
     @answer = @question.answers.create(answer_params)
@@ -23,7 +22,7 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if @answer.update(answer_params)
+    if answer.update(answer_params)
       redirect_to @answer
     else
       render :edit
@@ -31,7 +30,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer.destroy
+    answer.destroy
     redirect_to @answer.question
   end
 
@@ -41,9 +40,11 @@ class AnswersController < ApplicationController
     @question = Question.find(params[:question_id])
   end
 
-  def find_answer
-    @answer = Answer.find(params[:id])
+  def answer
+    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
   end
+
+  helper_method :answer
 
   def answer_params
     params.require(:answer).permit(:body, :correct)
