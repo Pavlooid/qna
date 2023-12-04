@@ -7,7 +7,6 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'GET #index' do
     let(:answer) { answers.sample }
-
     before { get :index, params: { question_id: question, id: answer } }
 
     it 'show all answers of question' do
