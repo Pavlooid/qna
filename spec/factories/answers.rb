@@ -3,6 +3,7 @@ FactoryBot.define do
     body { "MyString" }
     correct { true }
     association :question
+    association :author
 
     trait :invalid do
       body { nil }

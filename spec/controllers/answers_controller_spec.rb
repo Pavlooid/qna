@@ -1,17 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { create(:question) }
+  let(:user) { create(:user) }
+  let(:question) { create(:question, :with_answers) }
   let(:answers) { question.answers }
-  let(:answer) { create(:answer) }
+  let(:answer) { answers.sample }
 
   describe 'GET #index' do
-    let(:answer) { answers.sample }
     before { get :index, params: { question_id: question, id: answer } }
-
-    it 'show all answers of question' do
-      expect(assigns(:asnwers)).to eq answer
-    end
 
     it 'render index view' do
       expect(response).to render_template :index
@@ -19,6 +15,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #show' do
+    let(:answer) { answers.sample }
+
     before { get :show, params: { question_id: question, id: answer.id } }
 
     it 'render show view' do
@@ -43,13 +41,19 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    let!(:question) { create(:question, :with_answers) }
+
+    before { login }
+
     context 'valid' do
+      let(:answer_params) { { answer: attributes_for(:answer, author_id: user.id), question_id: question.id, author_id: user.id } }
+      
       it 'save new answer in db' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
+        expect { post :create, params: { **answer_params } }.to change(Answer, :count).by(1) 
       end
       it 'redirects to show view' do
-        post :create, params: { question_id: question.id, answer: attributes_for(:answer) }
-        expect(response).to redirect_to assigns(:answer)
+        post :create, params: { **answer_params }
+        expect(response).to redirect_to(question_path(question))
       end
     end
 

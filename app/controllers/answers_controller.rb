@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
-
+  
+  before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[show new create]
 
   def show; end
@@ -13,9 +14,9 @@ class AnswersController < ApplicationController
   def edit; end
 
   def create
-    @answer = @question.answers.create(answer_params)
+    @answer = @question.answers.create(**answer_params, author: current_user)
     if @answer.save
-      redirect_to @answer
+      redirect_to question_path(@answer.question)
     else
       render :new
     end
@@ -47,6 +48,6 @@ class AnswersController < ApplicationController
   helper_method :answer
 
   def answer_params
-    params.require(:answer).permit(:body, :correct)
+    params.require(:answer).permit(:body, :correct, :author_id)
   end
 end

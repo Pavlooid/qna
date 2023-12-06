@@ -1,5 +1,7 @@
 class QuestionsController < ApplicationController
+  
   before_action :authenticate_user!, except: %i[index show]
+
   def index
     @questions = Question.all
   end
@@ -11,7 +13,7 @@ class QuestionsController < ApplicationController
   def edit; end
 
   def create
-    @question = Question.new(question_params)
+    @question = Question.new(**question_params, author: current_user)
 
     if @question.save
       redirect_to @question, notice: 'Your question successfully created.'
@@ -26,10 +28,14 @@ class QuestionsController < ApplicationController
     else
       render :edit
     end
+  end
 
-    def destroy
+  def destroy
+    if question.author == current_user
       question.destroy
-      redirect_to question_path
+      redirect_to question_path, notice: 'Question was successfully deleted.'
+    else
+      redirect_to question_path, notice: 'Question was not created by you.'
     end
   end
 
@@ -42,6 +48,6 @@ class QuestionsController < ApplicationController
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body)
+    params.require(:question).permit(:title, :body, :author_id)
   end
 end
