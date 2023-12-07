@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:user) { create(:user) }
+  let!(:user) { create(:user) }
   let(:question) { create(:question, :with_answers) }
   let(:answers) { question.answers }
   let(:answer) { answers.sample }
@@ -24,18 +24,11 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
-  describe 'GET #new' do
-    before { get :new, params: { question_id: question, id: answer.id } }
-
-    it 'render new view' do
-      expect(response).to render_template :new
-    end
-  end
-
   describe 'GET #edit' do
-    before { get :edit, params: { question_id: question, id: answer.id } }
+    before { login(user) }
+    before { get :edit, params: { question_id: question.id, id: answer.id } }
 
-    it 'render new edit' do
+    it 'render edit view' do
       expect(response).to render_template :edit
     end
   end
@@ -43,16 +36,16 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     let!(:question) { create(:question, :with_answers) }
 
-    before { login }
+    before { login(user) }
 
     context 'valid' do
-      let(:answer_params) { { answer: attributes_for(:answer, author_id: user.id), question_id: question.id, author_id: user.id } }
+      let(:answer_params) { { answer: attributes_for(:answer, author_id: user.id), question_id: question, user_id: user.id } }
       
       it 'save new answer in db' do
-        expect { post :create, params: { **answer_params } }.to change(Answer, :count).by(1) 
+        expect { post :create, params: answer_params }.to change(Answer, :count).by(1) 
       end
       it 'redirects to show view' do
-        post :create, params: { **answer_params }
+        post :create, params: answer_params
         expect(response).to redirect_to(question_path(question))
       end
     end
@@ -63,12 +56,14 @@ RSpec.describe AnswersController, type: :controller do
       end
       it 're-render new view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
-        expect(response).to render_template :new
+        expect(response).to redirect_to question_path(question)
       end
     end
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
+
     context 'valid' do
       it 'answer to @answer' do
         patch :update, params: { id: answer.id, answer: attributes_for(:answer) }
@@ -76,16 +71,15 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'update answer' do
-        patch :update, params: { id: answer.id, answer: { body: 'Answer', correct: true } }
+        patch :update, params: { id: answer.id, answer: { body: 'Answer' } }
         answer.reload
 
         expect(answer.body).to eq 'Answer'
-        expect(answer.correct).to eq true
       end
 
       it 'redirect to answer' do
         patch :update, params: { id: answer.id, answer: attributes_for(:answer) }
-        expect(response).to redirect_to answer
+        expect(response).to redirect_to question_path(question)
       end
     end
 
@@ -95,7 +89,6 @@ RSpec.describe AnswersController, type: :controller do
         answer.reload
 
         expect(answer.body).to eq 'MyString'
-        expect(answer.correct).to eq true
       end
 
       it 're-render edit view' do
@@ -105,6 +98,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    before { login(user) }
+    
     let!(:question) { create(:question, :with_answers) }
 
     it 'delete answer' do
