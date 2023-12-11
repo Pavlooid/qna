@@ -1,16 +1,23 @@
 h1= @question.title
 p= @question.body
 
-- if user_signed_in?
-  = render 'answers/form'
-
-- if @question.answers.empty?
-  | No answers created yet
-- else
-  | All answers
-  table
-  - @question.answers.each do |answer|
-    tr
-      td.body = answer.body
-      - if current_user = answer.author
-        =button_to 'Delete', answer_path(answer), method: :delete
+.answer-errors
+  = render 'shared/errors', resource: @answer
+= form_with model: [@question, @answer] do |f|
+  = f.label :body
+  = f.text_area :body
+  = f.label :author_id, hidden: true
+  = f.text_field :author_id, value: current_user.id, hidden: true
+  = f.submit 'Answer'
+  
+.answers
+  - if @question.answers.empty?
+    | No answers created yet
+  - else
+    | All answers
+    table
+    - @question.answers.each do |answer|
+      tr
+        td.body = answer.body
+        - if current_user = answer.author
+          =button_to 'Delete', answer_path(answer), method: :delete

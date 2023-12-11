@@ -1,0 +1,4 @@
+tr
+  td.body = answer.body
+    - if current_user = answer.author
+      =button_to 'Delete', answer_path(answer), method: :delete

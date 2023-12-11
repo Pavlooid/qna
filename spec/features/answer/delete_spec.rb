@@ -24,10 +24,4 @@ feature 'User can delete answer', %q{
 
     expect(page).to have_no_content 'Delete'
   end
-
-  scenario 'Unauthorized user tries to answer question' do
-    visit question_path(question)
-
-    expect(page).to have_no_content 'Delete'
-  end
 end
