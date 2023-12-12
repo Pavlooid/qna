@@ -4,6 +4,7 @@ $(document).on('turbolinks:load', function() {
     $(this).hide();
     let answerId = $(this).data('answerId');
     $('form#edit-answer-' + answerId).removeClass('hidden');
+    console.log('12345');
   })
 
 });

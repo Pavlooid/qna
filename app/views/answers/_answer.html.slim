@@ -1,5 +1,5 @@
-td.body = answer.body
-- if current_user = answer.author
+p =answer.body
+- if current_user == answer.author
   p =link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
   = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
