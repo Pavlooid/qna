@@ -15,20 +15,12 @@ class AnswersController < ApplicationController
   def edit; end
 
   def create
-    @answer = @question.answers.new(answer_params)
-    if @answer.save
-      redirect_to question_path(@answer.question), notice: 'Your answer successfully created.'
-    else
-      redirect_to question_path(@question), notice: 'Something went wrong.'
-    end
+    @answer = @question.answers.create(answer_params)
   end
 
   def update
-    if @answer.update(answer_params)
-      redirect_to question_path(@answer.question)
-    else
-      render :edit
-    end
+    @answer.update(answer_params)
+    @question = @answer.question
   end
 
   def destroy

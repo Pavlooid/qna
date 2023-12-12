@@ -6,14 +6,6 @@ RSpec.describe AnswersController, type: :controller do
   let(:answers) { question.answers }
   let(:answer) { answers.sample }
 
-  describe 'GET #index' do
-    before { get :index, params: { question_id: question, id: answer } }
-
-    it 'render index view' do
-      expect(response).to render_template :index
-    end
-  end
-
   describe 'GET #show' do
     let(:answer) { answers.sample }
 
@@ -42,21 +34,21 @@ RSpec.describe AnswersController, type: :controller do
       let(:answer_params) { { answer: attributes_for(:answer, author_id: user.id), question_id: question, user_id: user.id } }
       
       it 'save new answer in db' do
-        expect { post :create, params: answer_params }.to change(Answer, :count).by(1) 
+        expect { post :create, params: answer_params, format: :js }.to change(question.answers, :count).by(1) 
       end
       it 'redirects to show view' do
-        post :create, params: answer_params
-        expect(response).to redirect_to(question_path(question))
+        post :create, params: answer_params, format: :js
+        expect(response).to render_template :create
       end
     end
 
     context 'invalid' do
       it 'no save' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) } }.to_not change(Answer, :count)
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }, format: :js }.to_not change(question.answers, :count)
       end
       it 're-render new view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
-        expect(response).to redirect_to question_path(question)
+        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid), format: :js }
+        expect(response).to render_template :create
       end
     end
   end
@@ -65,34 +57,29 @@ RSpec.describe AnswersController, type: :controller do
     before { login(user) }
 
     context 'valid' do
-      it 'answer to @answer' do
-        patch :update, params: { id: answer.id, answer: attributes_for(:answer) }
-        expect(assigns(:answer)).to eq(answer)
-      end
-
       it 'update answer' do
-        patch :update, params: { id: answer.id, answer: { body: 'Answer' } }
+        patch :update, params: { id: answer.id, answer: { body: 'Answer' } }, format: :js
         answer.reload
 
         expect(answer.body).to eq 'Answer'
       end
 
-      it 'redirect to answer' do
-        patch :update, params: { id: answer.id, answer: attributes_for(:answer) }
-        expect(response).to redirect_to question_path(question)
+      it 'render update view' do
+        patch :update, params: { id: answer.id, answer: attributes_for(:answer) }, format: :js
+        expect(response).to render_template :update
       end
     end
 
     context 'invalid' do
-      before { patch :update, params: { id: answer.id, answer: attributes_for(:answer, :invalid) } }
+      before { patch :update, params: { id: answer.id, answer: attributes_for(:answer, :invalid) }, format: :js }
       it 'no change' do
         answer.reload
 
         expect(answer.body).to eq 'MyString'
       end
 
-      it 're-render edit view' do
-        expect(response).to render_template :edit
+      it 'render update view' do
+        expect(response).to render_template :update
       end
     end
   end

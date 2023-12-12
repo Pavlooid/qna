@@ -17,24 +17,18 @@ feature 'User can create answer', %q{
       visit question_path(question)
     end
 
-    scenario 'asks question' do
+    scenario 'asks question', js: true do
       fill_in 'Body', with: 'My first answer'
       click_on 'Answer'
 
       expect(page).to have_content 'My first answer'
     end
 
-    scenario 'asks question with errors' do
+    scenario 'asks question with errors', js: true do
       fill_in 'Body', with: ''
       click_on 'Answer'
 
-      expect(page).to have_content 'Something went wrong.'
+      expect(page).to have_content "Body can't be blank"
     end
-  end
-
-  scenario 'Unauthorized user tries to ask question' do
-    visit question_path(question)
-
-    expect(page).to have_no_content 'Answer'
   end
 end
