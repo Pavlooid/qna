@@ -1,4 +1,12 @@
-tr
-  td.body = answer.body
-    - if current_user = answer.author
-      =button_to 'Delete', answer_path(answer), method: :delete
+td.body = answer.body
+- if current_user = answer.author
+  p =link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+
+  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+    = f.label :author_id, hidden: true
+    = f.text_field :author_id, value: current_user.id, hidden: true
+    = f.submit 'Save'
+
+  p =link_to 'Delete', answer_path(answer), method: :delete
