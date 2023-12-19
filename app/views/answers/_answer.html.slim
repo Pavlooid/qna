@@ -1,12 +1,17 @@
-p =answer.body
+div(id="answer_#{answer.id}")
+p = answer.body
 - if current_user == answer.author
-  p =link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+  p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
-  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
+  = form_with model: answer, class: 'hidden', local: false, html: { id: "edit-answer-#{answer.id}" } do |f|
     = f.label :body, 'Your answer'
     = f.text_area :body
     = f.label :author_id, hidden: true
-    = f.text_field :author_id, value: current_user.id, hidden: true
+    - if user_signed_in?
+      = f.text_field :author_id, value: current_user.id, hidden: true
+    - else
+      = f.text_field :author_id, value: 'empty', hidden: true
     = f.submit 'Save'
 
-  p =link_to 'Delete', answer_path(answer), method: :delete
+- if current_user == answer.author
+  p = link_to 'Delete', answer_path(answer), method: :delete, remote: true

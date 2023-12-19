@@ -15,13 +15,7 @@ class QuestionsController < ApplicationController
     @question = current_user.questions.new
   end
 
-  def edit 
-    if @question.author == current_user
-      render :edit
-    else
-      redirect_to question_path, notice: 'Question was not created by you.'
-    end
-  end
+  def edit; end
 
   def create
     @question = current_user.questions.new(question_params)
@@ -34,10 +28,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to questions_path
+    if @question.author == current_user
+      @question.update(question_params)
+      @questions = Question.all
     else
-      render :edit
+      redirect_to questions_path, alert: 'You do not have permisson!'
     end
   end
 
@@ -55,8 +50,6 @@ class QuestionsController < ApplicationController
   def find_question
     @question = Question.find(params[:id])
   end
-
-  helper_method :question
 
   def question_params
     params.require(:question).permit(:title, :body, :author_id)

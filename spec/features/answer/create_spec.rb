@@ -9,7 +9,7 @@ feature 'User can create answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question) }
 
-  describe 'Authorized user' do
+  describe 'Authorized user', js: true do
 
     background do
       sign_in(user)

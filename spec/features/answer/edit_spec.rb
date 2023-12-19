@@ -7,13 +7,14 @@ feature 'User can edit his own answer', %q{
 } do
 
   given!(:user) { create(:user) }
+  given!(:user2) { create(:user) }
   given!(:question) { create(:question, author: user) }
   given!(:answer) { create(:answer, author: user, question: question) }
 
   scenario 'Unauthorized can not edit answer' do
-    visit question_path(question)
+    visit questions_path(question)
 
-    expect(page).to_not have_link 'Edit'
+    expect(page).to_not have_content 'Edit'
   end
 
   describe 'Authorized user' do
@@ -33,10 +34,11 @@ feature 'User can edit his own answer', %q{
       end
     end
 
-    scenario 'tries to edit not his own answer' do
+    scenario 'tries to edit not his own answer', js: true do
+      sign_in(user2)
+      visit question_path(question)
 
+      expect(page).to_not have_content 'Edit'
     end
-
-    scenario 'edit his answer with errors'
   end
 end

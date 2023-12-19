@@ -20,15 +20,13 @@ feature 'User can delete question', %q{
   scenario 'Not creator of question tries to delete it' do
     sign_in(user2)
     visit questions_path
-    click_on 'Delete'
 
-    expect(page).to have_content 'Question was not created by you.'
+    expect(page).to_not have_content 'Delete'
   end
 
   scenario 'Unauthorized user tries to delete question' do
     visit questions_path
-    click_on 'Delete'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_content 'Delete'
   end
 end
