@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
   
   before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[create]
-  before_action :find_answer, only: %i[edit destroy update]
+  before_action :find_answer, only: %i[edit destroy update best]
 
   def show; end
 
@@ -24,11 +24,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if @answer.author == current_user
-      @answer.destroy
-    else
-      redirect_to questions_path(@answer.question), alert: 'You do not have permisson!'
-    end
+    @answer.author == current_user
+    @answer.destroy
+  end
+
+  def best
+    @question = @answer.question
+    @question.update(best_answer_id: @answer.id)
   end
 
   private

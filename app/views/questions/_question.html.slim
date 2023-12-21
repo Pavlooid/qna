@@ -1,23 +1,22 @@
-p= link_to 'Ask question', new_question_path
+div(id="question_#{question.id}")
+  - if @questions.empty?
+    | No question created yet
+  - else
+      p = link_to question.title, question
+      p = question.body
+      td.action
+        - if current_user == question.author
+          p = link_to 'Delete', question_path(question), method: :delete, remote: true
+          p = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
 
-- if @questions.empty?
-  | No question created yet
-- else
-    p = link_to question.title, question
-    p = question.body
-    td.action
-      - if current_user == question.author
-        p = link_to 'Delete', question_path(question), method: :delete
-        p = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
-
-        = form_with model: question, class: 'hidden', html: { id: "edit-question-#{question.id}"} do |f|
-          = f.label :title, 'Your title'
-          = f.text_area :title
-          = f.label :body, 'Your body'
-          = f.text_area :body
-          = f.label :author_id, hidden: true
-          - if user_signed_in?
-             = f.text_field :author_id, value: current_user.id, hidden: true
-          - else
-            = f.text_field :author_id, value: 'empty', hidden: true
-          = f.submit 'Save'
+          = form_with model: question, class: 'hidden', html: { id: "edit-question-#{question.id}"} do |f|
+            = f.label :title, 'Your title'
+            = f.text_area :title
+            = f.label :body, 'Your body'
+            = f.text_area :body
+            = f.label :author_id, hidden: true
+            - if user_signed_in?
+               = f.text_field :author_id, value: current_user.id, hidden: true
+            - else
+              = f.text_field :author_id, value: 'empty', hidden: true
+            = f.submit 'Save'

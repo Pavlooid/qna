@@ -15,7 +15,7 @@ feature 'Author of question can choose best answer', %q{
 
   scenario 'Author of question can choose best answer', js: true do
     sign_in(user)
-    visit questions_path(question)
+    visit question_path(question)
 
     click_on 'Best', match: :first
     expect(page).to have_content('Best answer!')
@@ -23,13 +23,13 @@ feature 'Author of question can choose best answer', %q{
 
   scenario 'Not author of question can not choose best answer', js: true do
     sign_in(user2)
-    visit questions_path(question)
+    visit question_path(question)
 
     expect(page).to_not have_content('Best')
   end
 
-  scenario 'Unauthorized user' do
-    visit questions_path(question)
+  scenario 'Unauthorized user', js: true do
+    visit question_path(question)
 
     expect(page).to_not have_content('Best')
   end

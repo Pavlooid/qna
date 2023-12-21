@@ -1,5 +1,10 @@
 div(id="answer_#{answer.id}")
 p = answer.body
+- if answer.best?(answer.question)
+  p = 'Best answer!'
+- elsif current_user == answer.author
+  = link_to 'Best', answer_best_path(answer, id: answer.id), method: :get, remote: true
+
 - if current_user == answer.author
   p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 

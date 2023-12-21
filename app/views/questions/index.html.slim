@@ -1,6 +1,8 @@
 = render 'shared/nav'
 
-.questions
+p = link_to 'Ask question', new_question_path
+
+.question
  = render @questions
 
 .question-errors

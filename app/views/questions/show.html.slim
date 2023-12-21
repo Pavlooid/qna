@@ -2,7 +2,7 @@ h1= @question.title
 p= @question.body
 
 .answers
-  = render @question.answers
+  = render @question.answers.order(best: :desc)
 
 .answer-errors
   = render 'shared/errors', resource: @answer
