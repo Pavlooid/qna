@@ -24,8 +24,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer.author == current_user
-    @answer.destroy
+    @answer.destroy if current_user.author_of?(@answer)
   end
 
   def best

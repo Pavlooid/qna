@@ -2,10 +2,10 @@ div(id="answer_#{answer.id}")
 p = answer.body
 - if answer.best?(answer.question)
   p = 'Best answer!'
-- elsif current_user == answer.author
+- elsif current_user.author_of?(answer)
   = link_to 'Best', answer_best_path(answer, id: answer.id), method: :get, remote: true
 
-- if current_user == answer.author
+- if current_user.author_of?(answer)
   p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
   = form_with model: answer, class: 'hidden', local: false, html: { id: "edit-answer-#{answer.id}" } do |f|
@@ -18,5 +18,5 @@ p = answer.body
       = f.text_field :author_id, value: 'empty', hidden: true
     = f.submit 'Save'
 
-- if current_user == answer.author
+- if current_user.author_of?(answer)
   p = link_to 'Delete', answer_path(answer), method: :delete, remote: true
