@@ -29,8 +29,6 @@ feature 'User can edit his own question', %q{
     expect(page).to_not have_content 'Edit'
   end
 
-  end
-
   scenario 'Unauthorized user tries to edit question' do
     visit questions_path
     expect(page).to_not have_content 'Edit'

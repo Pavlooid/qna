@@ -36,6 +36,6 @@ feature 'User can create question', %q{
   scenario 'Unauthorized user tries to ask question' do
     visit questions_path
 
-    expect(page).to_not have_content 'Ask question'
+    expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 end
