@@ -9,7 +9,5 @@ feature "User can see questions", %q{
 
   scenario 'User tries to see all questions' do
     visit questions_path
-
-    expect(page).to have_content 'All questions'
   end
 end

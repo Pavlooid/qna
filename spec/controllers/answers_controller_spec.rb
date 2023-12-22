@@ -9,7 +9,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'GET #show' do
     let(:answer) { answers.sample }
 
-    before { get :show, params: { question_id: question, id: answer.id } }
+    before { get :show, params: { question_id: question, id: answer.id }, format: :js }
 
     it 'render show view' do
       expect(response).to render_template :show
@@ -18,7 +18,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'GET #edit' do
     before { login(user) }
-    before { get :edit, params: { question_id: question.id, id: answer.id } }
+    before { get :edit, params: { question_id: question.id, id: answer.id }, format: :js }
 
     it 'render edit view' do
       expect(response).to render_template :edit

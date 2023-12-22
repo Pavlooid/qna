@@ -7,9 +7,10 @@ feature 'User can delete answer', %q{
 
   given(:user) { create(:user) }
   given(:user2) { create(:user) }
-  given(:question) { create(:question, :with_answers, author: user) }
+  given!(:question) { create(:question, author: user) }
+  given!(:answer) { create(:answer, question: question, author: user)}
 
-  scenario 'Author of answer delete it' do
+  scenario 'Author of answer delete it', js: true do
     sign_in(user)
     visit question_path(question)
 
