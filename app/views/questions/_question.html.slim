@@ -4,19 +4,32 @@ div(id="question_#{question.id}")
   - else
       p = link_to question.title, question
       p = question.body
+      - if question.files.attached?
+        - question.files.each do |f|
+          p = link_to f.filename.to_s, url_for(f)
       td.action
         - if user_signed_in? && current_user.author_of?(question)
           p = link_to 'Delete', question_path(question), method: :delete, remote: true
           p = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
 
           = form_with model: question, class: 'hidden', remote: true, html: { id: "edit-question-#{question.id}"} do |f|
-            = f.label :title, 'Your title'
-            = f.text_area :title
-            = f.label :body, 'Your body'
-            = f.text_area :body
-            = f.label :author_id, hidden: true
-            - if user_signed_in?
-               = f.text_field :author_id, value: current_user.id, hidden: true
-            - else
-              = f.text_field :author_id, value: 'empty', hidden: true
-            = f.submit 'Save'
+            p
+              = f.label :title, 'Your title'
+              = f.text_area :title
+            p
+              = f.label :body, 'Your body'
+              = f.text_area :body
+            p
+              - if question.files.attached?
+                - question.files.each do |f|
+                  p = link_to f.filename.to_s, url_for(f)
+                  # добавить delete
+              = f.label :files
+              = f.file_field :files, multiple: true
+            p
+              - if user_signed_in?
+                = f.text_field :author_id, value: current_user.id, hidden: true
+              - else
+                = f.text_field :author_id, value: 'empty', hidden: true
+            p
+              = f.submit 'Save'
