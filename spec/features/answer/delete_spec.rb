@@ -16,7 +16,7 @@ feature 'User can delete answer', %q{
 
     click_on 'Delete', match: :first
 
-    expect(page).to have_content 'Question was successfully deleted.'
+    expect(page).to_not have_content 'My string'
   end
 
   scenario 'Not creator of answer tries to delete it' do

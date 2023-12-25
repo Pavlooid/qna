@@ -1,15 +1,18 @@
 h1= @question.title
 p= @question.body
 
+- if @question.file.attached?
+  p = link_to @question.file.filename.to_s, url_for(@question.file)
+
 .answers
-  = render @question.answers.order(best: :desc)
+  = render @question.answers
 
 .answer-errors
   = render 'shared/errors', resource: @answer
 
 - if user_signed_in?
   | Create new answer
-  = form_with model: [@question, @answer], class: 'new-answer' do |f|
+  = form_with model: [@question, @answer], class: 'new-answer', remote: true do |f|
     = f.label :body
     = f.text_area :body
     = f.label :author_id, hidden: true
