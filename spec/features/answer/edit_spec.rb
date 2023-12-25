@@ -18,7 +18,7 @@ feature 'User can edit his own answer', %q{
   end
 
   describe 'Authorized user' do
-    scenario 'edits his answer', js: true do
+    scenario 'edits his answer and and new files', js: true do
       sign_in(user)
       visit question_path(question)
 
@@ -26,11 +26,14 @@ feature 'User can edit his own answer', %q{
 
       within '.answers' do
         fill_in 'Your answer', with: 'another answer'
+        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
         click_on 'Save'
 
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'another answer'
         expect(page).to_not have_selector 'textarea'
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
       end
     end
 

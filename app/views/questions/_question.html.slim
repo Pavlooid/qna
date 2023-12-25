@@ -27,6 +27,7 @@ div(id="question_#{question.id}")
               = f.label :files
               = f.file_field :files, multiple: true
             p
+              = f.label :author_id, hidden: true
               - if user_signed_in?
                 = f.text_field :author_id, value: current_user.id, hidden: true
               - else
