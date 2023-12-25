@@ -17,18 +17,28 @@ feature 'User can create answer', %q{
       visit question_path(question)
     end
 
-    scenario 'asks question', js: true do
+    scenario 'asks answer', js: true do
       fill_in 'Body', with: 'My first answer'
       click_on 'Answer'
 
       expect(page).to have_content 'My first answer'
     end
 
-    scenario 'asks question with errors', js: true do
+    scenario 'asks answer with errors', js: true do
       fill_in 'Body', with: ''
       click_on 'Answer'
 
       expect(page).to have_content "Body can't be blank"
+    end
+
+    scenario 'asks answer with attached files', js: true do
+      fill_in 'Body', with: 'Code'
+
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Answer'
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
     end
   end
 end

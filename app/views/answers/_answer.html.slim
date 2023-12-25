@@ -1,5 +1,8 @@
 div(id="answer_#{answer.id}")
 p = answer.body
+-if answer.files.attached?
+  -answer.files.each do |f|
+    p = link_to f.filename.to_s, url_for(f)
 - if answer.best?(answer.question)
   p = 'Best answer!'
 - elsif current_user.author_of?(answer)

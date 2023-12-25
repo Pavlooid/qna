@@ -2,7 +2,7 @@ h1= @question.title
 p= @question.body
 
 - if @question.files.attached?
-  -@question.files.each do |f|
+  - @question.files.each do |f|
     p = link_to f.filename.to_s, url_for(f)
 
 .answers
@@ -14,8 +14,13 @@ p= @question.body
 - if user_signed_in?
   | Create new answer
   = form_with model: [@question, @answer], class: 'new-answer', remote: true do |f|
-    = f.label :body
-    = f.text_area :body
-    = f.label :author_id, hidden: true
-    = f.text_field :author_id, value: current_user.id, hidden: true
-    = f.submit 'Answer'
+    p
+      = f.label :body
+      = f.text_area :body
+    p
+      = f.label :author_id, hidden: true
+      = f.text_field :author_id, value: current_user.id, hidden: true
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true
+    p = f.submit 'Answer'
