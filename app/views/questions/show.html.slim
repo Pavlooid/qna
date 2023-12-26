@@ -22,5 +22,5 @@ p= @question.body
       = f.text_field :author_id, value: current_user.id, hidden: true
     p
       = f.label :files
-      = f.file_field :files, multiple: true
+      = f.file_field :files, multiple: true, direct_upload: true
     p = f.submit 'Answer'
