@@ -34,6 +34,16 @@ feature 'User can edit his own question', %q{
       expect(page).to have_link 'rails_helper.rb'
       expect(page).to have_link 'spec_helper.rb'
     end
+
+    scenario 'edit his own question by deleting file', js: true do
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      click_on 'Save'
+      click_on 'Delete file', match: :first
+      click_on 'Delete file', match: :first
+
+      expect(page).to_not have_link 'rails_helper.rb'
+      expect(page).to_not have_link 'spec_helper.rb'
+    end
   end
 
   scenario 'Authorized user tries to edit not his own question' do

@@ -37,6 +37,21 @@ feature 'User can edit his own answer', %q{
       end
     end
 
+    scenario 'edit his own answer by deleting file', js: true do
+      sign_in(user)
+      visit question_path(question)
+
+      click_on 'Edit'
+      
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"], match: :first
+      click_on 'Save'
+      click_on 'Delete file', match: :first
+      click_on 'Delete file', match: :first
+
+      expect(page).to_not have_link 'rails_helper.rb'
+      expect(page).to_not have_link 'spec_helper.rb'
+    end
+
     scenario 'tries to edit not his own answer', js: true do
       sign_in(user2)
       visit question_path(question)
