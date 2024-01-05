@@ -1,5 +1,10 @@
 div(id="answer_#{answer.id}")
 p = answer.body
+-if answer.files.attached?
+  -answer.files.each do |f|
+    p = link_to f.filename.to_s, url_for(f)
+    - if user_signed_in? && current_user.author_of?(answer)
+      p = button_to 'Delete file', purge_file_path(f), method: :delete
 - if answer.best?(answer.question)
   p = 'Best answer!'
 - elsif current_user.author_of?(answer)
@@ -8,9 +13,14 @@ p = answer.body
 - if current_user.author_of?(answer)
   p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
-  = form_with model: answer, class: 'hidden', local: false, html: { id: "edit-answer-#{answer.id}" } do |f|
+  = form_with model: answer, class: 'hidden', remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
     = f.label :body, 'Your answer'
     = f.text_area :body
+    - if answer.files.attached?
+      - answer.files.each do |f|
+        p = link_to f.filename.to_s, url_for(f)
+    = f.label :files
+    = f.file_field :files, multiple: true
     = f.label :author_id, hidden: true
     - if user_signed_in?
       = f.text_field :author_id, value: current_user.id, hidden: true

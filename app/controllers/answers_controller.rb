@@ -24,7 +24,9 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer.destroy if current_user.author_of?(@answer)
+    if current_user.author_of?(@answer)
+      @answer.destroy
+    end
   end
 
   def best
@@ -39,10 +41,10 @@ class AnswersController < ApplicationController
   end
 
   def find_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.with_attached_files.find(params[:id])
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :author_id)
+    params.require(:answer).permit(:body, :author_id, files: [])
   end
 end

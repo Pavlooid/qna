@@ -21,7 +21,7 @@ class QuestionsController < ApplicationController
     @question = current_user.questions.new(question_params)
 
     if @question.save
-      redirect_to questions_path, notice: 'Your question successfully created.'
+      redirect_to question_path(@question), notice: 'Your question successfully created.'
     else
       render :new
     end
@@ -37,21 +37,18 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if @question.author == current_user
+    if current_user.author_of?(@question)
       @question.destroy
-      redirect_to questions_path, notice: 'Question was successfully deleted.'
-    else
-      redirect_to questions_path, notice: 'Question was not created by you.'
     end
   end
 
   private
 
   def find_question
-    @question = Question.find(params[:id])
+    @question = Question.with_attached_files.find(params[:id])
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, :author_id)
+    params.require(:question).permit(:title, :body, :author_id, files: [])
   end
 end
