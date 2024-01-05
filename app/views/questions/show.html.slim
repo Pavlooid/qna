@@ -5,6 +5,12 @@ p= @question.body
   - @question.files.each do |f|
     p = link_to f.filename.to_s, url_for(f)
 
+.links
+  p Links:
+  ul
+    - @question.links.each do |link|
+      li = link_to link.name, link.url
+
 .answers
   = render @question.answers
 

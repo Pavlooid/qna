@@ -31,6 +31,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     before { get :new }
 
+    it 'assigns a new Question' do
+      expect(assigns(:question).links.first).to be_a_new(Link)
+    end
+
     it 'render new view' do
       expect(response).to render_template :new
     end
@@ -102,12 +106,7 @@ RSpec.describe QuestionsController, type: :controller do
     let!(:question) { create(:question, author: user) }
 
     it 'delete question' do 
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
-    end
-
-    it 'redirect to index' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+      expect { delete :destroy, params: { id: question }, format: :js }.to change(Question, :count).by(-1)
     end
   end
 end
