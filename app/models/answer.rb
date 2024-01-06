@@ -7,7 +7,7 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
-  accepts_nested_attributes_for :links, reject_if: :all_blank
+  accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
   def best?(resource)
     resource.best_answer_id == self.id

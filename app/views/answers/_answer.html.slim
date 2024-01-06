@@ -34,6 +34,8 @@ p = answer.body
       = f.text_field :author_id, value: current_user.id, hidden: true
     - else
       = f.text_field :author_id, value: 'empty', hidden: true
+    = f.fields_for :links do |l|
+    = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
     = f.submit 'Save'
 
 - if current_user.author_of?(answer)

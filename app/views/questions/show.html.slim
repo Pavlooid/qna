@@ -1,15 +1,16 @@
 h1= @question.title
 p= @question.body
 
-.links
-  p Links:
-  ul
-    - @question.links.each do |link|
-      li = link_to link.name, link.url
-
 - if @question.files.attached?
   - @question.files.each do |f|
     p = link_to f.filename.to_s, url_for(f)
+
+.links
+  -if @question.links.present?
+    p Links:
+    ul
+      - @question.links.each do |link|
+        li = link_to link.name, link.url
 
 .answers
   = render @question.answers
@@ -29,13 +30,11 @@ p= @question.body
     p
       = f.label :files
       = f.file_field :files, multiple: true, direct_upload: true
-    p Links:
+    p Links
     p
-      = f.fields_for :links do |l|
-        p
-          = l.label :name, 'Link name'
-          = l.text_field :name
-        p
-          = l.label :url
-          = l.text_field :url
+      .links
+      = f.fields_for :links do |link|
+        = render 'link_fields', f: link
+      .links-url
+        = link_to_add_association 'add link', f, :links, class: "btn btn-info"
     p = f.submit 'Answer'
