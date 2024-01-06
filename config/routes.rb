@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     resources :answers, shallow: true
   end
 
+  resources :links, only: :destroy
+
   root to:'questions#index'
 
   get 'answer_best', to: 'answers#best'
