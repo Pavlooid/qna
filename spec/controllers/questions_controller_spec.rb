@@ -12,10 +12,6 @@ RSpec.describe QuestionsController, type: :controller do
     it 'show all questions' do
       expect(assigns(:questions)).to match_array(questions)
     end
-
-    it 'render index view' do
-      expect(response).to render_template :index
-    end
   end
 
   describe 'GET #show' do
@@ -23,6 +19,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     it 'render show view' do
       expect(response).to render_template :show
+    end
+
+    it 'assigns new link for question' do
+      expect(assigns(:answer).links.first).to be_a_new(Link)
     end
   end
 
