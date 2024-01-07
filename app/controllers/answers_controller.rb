@@ -30,6 +30,7 @@ class AnswersController < ApplicationController
   def best
     @question = @answer.question
     @question.update(best_answer_id: @answer.id)
+    current_user.rewards.push(@question.reward) if @question.reward.present?
   end
 
   private
