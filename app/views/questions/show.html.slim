@@ -37,7 +37,7 @@ p= @question.body
       = f.file_field :files, multiple: true, direct_upload: true
     p Links
     p
-      .links
+    .links
       = f.fields_for :links do |link|
         = render 'link_fields', f: link
       .links-url
