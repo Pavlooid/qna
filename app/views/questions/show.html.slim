@@ -5,12 +5,28 @@ p= @question.body
   - @question.files.each do |f|
     p = link_to f.filename.to_s, url_for(f)
 
+.links
+  - if @question.links.present?
+    p Links:
+    ul
+      - @question.links.each do |link|
+        div(id="link_#{link.id}")
+          - if link.gist_url?
+            li = link_to link.url
+          - else
+            li = link_to link.name, link.url
+          - if current_user.author_of?(@question)
+            p = link_to 'Delete link', link_path(link), method: :delete, remote: true
+
+.reward
+  - if @question.reward.present?
+    = image_tag(@question.reward.file, size: '100x100')
+
 .answers
   = render @question.answers
 
 .answer-errors
   = render 'shared/errors', resource: @answer
-
 - if user_signed_in?
   | Create new answer
   = form_with model: [@question, @answer], class: 'new-answer', remote: true do |f|
@@ -23,4 +39,11 @@ p= @question.body
     p
       = f.label :files
       = f.file_field :files, multiple: true, direct_upload: true
+    p Links
+    p
+    .links
+      = f.fields_for :links do |link|
+        = render 'link_fields', f: link
+      .links-url
+        = link_to_add_association 'add link', f, :links, class: "btn btn-info"
     p = f.submit 'Answer'

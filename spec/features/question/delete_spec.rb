@@ -9,12 +9,12 @@ feature 'User can delete question', %q{
   given!(:user2) { create(:user) }
   given!(:question) { create(:question, author: user) }
 
-  scenario 'Author of question delete it' do
+  scenario 'Author of question delete it', js: true do
     sign_in(user)
     visit questions_path
     click_on 'Delete'
 
-    expect(page).to have_content 'Question was successfully deleted.'
+    expect(page).to_not have_content 'MyString'
   end
 
   scenario 'Not creator of question tries to delete it' do

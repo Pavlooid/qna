@@ -1,6 +1,20 @@
 div(id="answer_#{answer.id}")
 p = answer.body
--if answer.files.attached?
+
+.links
+  - if answer.links.present?
+    p Links:
+    ul
+      - answer.links.each do |link|
+        div(id="link_#{link.id}")
+          - if link.gist_url?
+            li = link_to link.url
+          - else
+            li = link_to link.name, link.url
+          - if current_user.author_of?(answer)
+            p = link_to 'Delete link', link_path(link), method: :delete, remote: true
+
+- if answer.files.attached?
   -answer.files.each do |f|
     p = link_to f.filename.to_s, url_for(f)
     - if user_signed_in? && current_user.author_of?(answer)
@@ -26,6 +40,8 @@ p = answer.body
       = f.text_field :author_id, value: current_user.id, hidden: true
     - else
       = f.text_field :author_id, value: 'empty', hidden: true
+    = f.fields_for :links do |l|
+    = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
     = f.submit 'Save'
 
 - if current_user.author_of?(answer)

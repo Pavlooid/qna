@@ -8,11 +8,14 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @answer = @question.answers.new
+    @answer = Answer.new
+    @answer.links.build
   end
 
   def new 
     @question = current_user.questions.new
+    @question.links.build
+    @question.reward = Reward.new
   end
 
   def edit; end
@@ -37,9 +40,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@question)
-      @question.destroy
-    end
+    @question.destroy if current_user.author_of?(@question)
   end
 
   private
@@ -49,6 +50,6 @@ class QuestionsController < ApplicationController
   end
 
   def question_params
-    params.require(:question).permit(:title, :body, :author_id, files: [])
+    params.require(:question).permit(:title, :body, :author_id, files: [], links_attributes: [:name, :url, :_destroy], reward_attributes: [:title, :file])
   end
 end

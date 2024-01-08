@@ -34,4 +34,6 @@ div(id="question_#{question.id}")
               - else
                 = f.text_field :author_id, value: 'empty', hidden: true
             p
+              = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
+            p
               = f.submit 'Save'

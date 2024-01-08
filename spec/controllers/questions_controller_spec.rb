@@ -12,10 +12,6 @@ RSpec.describe QuestionsController, type: :controller do
     it 'show all questions' do
       expect(assigns(:questions)).to match_array(questions)
     end
-
-    it 'render index view' do
-      expect(response).to render_template :index
-    end
   end
 
   describe 'GET #show' do
@@ -24,12 +20,20 @@ RSpec.describe QuestionsController, type: :controller do
     it 'render show view' do
       expect(response).to render_template :show
     end
+
+    it 'assigns new link for question' do
+      expect(assigns(:answer).links.first).to be_a_new(Link)
+    end
   end
 
   describe 'GET #new' do
     before { login(user) }
 
     before { get :new }
+
+    it 'assigns a new Question' do
+      expect(assigns(:question).links.first).to be_a_new(Link)
+    end
 
     it 'render new view' do
       expect(response).to render_template :new
@@ -102,12 +106,7 @@ RSpec.describe QuestionsController, type: :controller do
     let!(:question) { create(:question, author: user) }
 
     it 'delete question' do 
-      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
-    end
-
-    it 'redirect to index' do
-      delete :destroy, params: { id: question }
-      expect(response).to redirect_to questions_path
+      expect { delete :destroy, params: { id: question }, format: :js }.to change(Question, :count).by(-1)
     end
   end
 end

@@ -1,0 +1,6 @@
+- if current_user.rewards.present?
+    p = "Question title: #{reward.question.title}"
+    p = "Reward title: #{reward.title}"
+    = image_tag(reward.file, size: '100x100')
+- else
+  | No rewards

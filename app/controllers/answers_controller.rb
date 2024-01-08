@@ -24,14 +24,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if current_user.author_of?(@answer)
-      @answer.destroy
-    end
+    @answer.destroy if current_user.author_of?(@answer)
   end
 
   def best
     @question = @answer.question
     @question.update(best_answer_id: @answer.id)
+    current_user.rewards.push(@question.reward) if @question.reward.present?
   end
 
   private
@@ -45,6 +44,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body, :author_id, files: [])
+    params.require(:answer).permit(:body, :author_id, files: [], links_attributes: [:name, :url, :_destroy])
   end
 end
