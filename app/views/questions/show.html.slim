@@ -29,7 +29,7 @@ p= @question.body
   = render 'shared/errors', resource: @answer
 - if user_signed_in?
   | Create new answer
-  = form_with model: [@question, @answer], class: 'new-answer', remote: true do |f|
+  = form_with model: [@question, @answer], class: 'new-answer', remote: true, data: { type: :html } do |f|
     p
       = f.label :body
       = f.text_area :body
