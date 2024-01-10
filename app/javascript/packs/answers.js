@@ -18,4 +18,9 @@ $(document).on('turbolinks:load', function() {
         $('.answer-errors').append('<p>' + value + '</p>');
       })
     })
+
+  $('.answers').on('ajax:success', function(e) {
+    let rate = e.detail[0];
+    $('.rating-answer').text('Rating: ' + rate.rating );
+  })
 });
