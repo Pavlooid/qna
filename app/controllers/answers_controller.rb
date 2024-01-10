@@ -19,10 +19,11 @@ class AnswersController < ApplicationController
 
     respond_to do |format|
       if @answer.save
+        format.html { render @answer }
         format.json { render json: @answer }
       else
         format.json do
-          render json: @answer.errors.full_messages, status: :unprocessable_entity
+          render json: @answer.errors.full_messages, status: 422
         end
       end
     end
