@@ -46,7 +46,7 @@ p = answer.body
 
 - if current_user.author_of?(answer)
   p = link_to 'Delete', answer_path(answer), method: :delete, remote: true
-- elsif current_user.not_author_of?(question)
+- elsif current_user.not_author_of?(answer)
   p class = "rating-answer" Rating: #{answer.show_rating}
 
   p = link_to 'Like', rate_path(id: answer.id, liked_type: 'answer', liked_params: { rating: +1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
