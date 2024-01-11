@@ -20,6 +20,8 @@ feature 'User can like or dislike answer', %q{
     visit question_path(question)
 
     click_on 'Like', match: :first
+
+    expect(page).to have_content 'Rating: 1'
   end
 
   scenario 'Authorized user can not vote for his own answer', js: true do

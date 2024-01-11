@@ -17,7 +17,7 @@ module Liked
         }}
       else
         format.json do 
-          render json: @resource_liked.errors.full_messages, status: 422
+          render json: @resource_liked.errors.full_messages, status: :unprocessable_entity
         end
       end
     end
@@ -32,7 +32,7 @@ module Liked
         }}
       else
         format.json do 
-          render json: @resource_liked.errors.full_messages, status: 422
+          render json: @resource_liked.errors.full_messages, status: :unprocessable_entity
         end
       end
     end

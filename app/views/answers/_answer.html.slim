@@ -17,14 +17,14 @@ p = answer.body
 - if answer.files.attached?
   -answer.files.each do |f|
     p = link_to f.filename.to_s, url_for(f)
-    - if user_signed_in? && current_user.author_of?(answer)
+    - if current_user&.author_of?(answer)
       p = button_to 'Delete file', purge_file_path(f), method: :delete
 - if answer.best?(answer.question)
   p = 'Best answer!'
-- elsif current_user.author_of?(answer)
+- elsif current_user&.author_of?(answer)
   = link_to 'Best', answer_best_path(answer, id: answer.id), method: :get, remote: true
 
-- if current_user.author_of?(answer)
+- if current_user&.author_of?(answer)
   p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
   = form_with model: answer, class: 'hidden', remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
@@ -44,9 +44,9 @@ p = answer.body
     = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
     = f.submit 'Save'
 
-- if current_user.author_of?(answer)
+- if current_user&.author_of?(answer)
   p = link_to 'Delete', answer_path(answer), method: :delete, remote: true
-- elsif current_user.not_author_of?(answer)
+- else
   p class = "rating-answer" Rating: #{answer.show_rating}
 
   p = link_to 'Like', rate_path(id: answer.id, liked_type: 'answer', liked_params: { rating: +1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }

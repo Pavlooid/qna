@@ -10,8 +10,4 @@ module Likeable
   def show_rating
     likes.sum(:rating)
   end
-
-  class_methods do
-
-  end
 end

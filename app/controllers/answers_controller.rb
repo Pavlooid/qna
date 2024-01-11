@@ -23,7 +23,7 @@ class AnswersController < ApplicationController
         format.json { render json: @answer }
       else
         format.json do
-          render json: @answer.errors.full_messages, status: 422
+          render json: @answer.errors.full_messages, status: :unprocessable_entity
         end
       end
     end

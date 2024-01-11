@@ -7,10 +7,10 @@ div(id="question_#{question.id}")
       - if question.files.attached?
         - question.files.each do |f|
           p = link_to f.filename.to_s, url_for(f)
-          - if user_signed_in? && current_user.author_of?(question) 
+          - if current_user&.author_of?(question) 
             p = button_to 'Delete file', purge_file_path(f), method: :delete
       td.action
-        - if user_signed_in? && current_user.author_of?(question)
+        - if current_user&.author_of?(question)
           p = link_to 'Delete', question_path(question), method: :delete, remote: true
           p = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
 
@@ -37,7 +37,7 @@ div(id="question_#{question.id}")
               = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
             p
               = f.submit 'Save'
-        - if user_signed_in? && current_user.not_author_of?(question)
+        - if current_user&.not_author_of?(question)
             p class = "rating-question" Rating: #{question.show_rating}
 
             p = link_to 'Like', rate_path(id: question.id, liked_type: 'question', liked_params: { rating: +1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
