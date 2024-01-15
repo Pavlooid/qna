@@ -2,8 +2,11 @@
 
 p = link_to 'Ask question', new_question_path
 
-.questions
- = render @questions
+- if @questions.any?
+  .questions
+   = render @questions
 
-.question-errors
-  = render 'shared/errors', resource: @question
+  .question-errors
+    = render 'shared/errors', resource: @question
+- else
+  p = 'No questions created yet.'

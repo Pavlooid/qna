@@ -16,4 +16,6 @@ Rails.application.routes.draw do
   post 'like', to: 'likes#like', as: 'rate'
 
   delete 'files/:id/purge', to: 'files#purge', as: 'purge_file'
+
+  mount ActionCable.server => '/cable'
 end

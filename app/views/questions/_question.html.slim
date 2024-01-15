@@ -1,44 +1,41 @@
 div(id="question_#{question.id}")
-  - if @questions.empty?
-    | No question created yet
-  - else
-      p = link_to question.title, question
-      p = question.body
-      - if question.files.attached?
-        - question.files.each do |f|
-          p = link_to f.filename.to_s, url_for(f)
-          - if current_user&.author_of?(question) 
-            p = button_to 'Delete file', purge_file_path(f), method: :delete
-      td.action
-        - if current_user&.author_of?(question)
-          p = link_to 'Delete', question_path(question), method: :delete, remote: true
-          p = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
+  p = link_to question.title, question
+  p = question.body
+  - if question.files.attached?
+    - question.files.each do |f|
+      p = link_to f.filename.to_s, url_for(f)
+      - if current_user&.author_of?(question) 
+        p = button_to 'Delete file', purge_file_path(f), method: :delete
+  td.action
+    - if current_user&.author_of?(question)
+      p = link_to 'Delete', question_path(question), method: :delete, remote: true
+      p = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
 
-          = form_with model: question, class: 'hidden', remote: true, html: { id: "edit-question-#{question.id}"} do |f|
-            p
-              = f.label :title, 'Your title'
-              = f.text_area :title
-            p
-              = f.label :body, 'Your body'
-              = f.text_area :body
-            p
-              - if question.files.attached?
-                - question.files.each do |f|
-                  p = link_to f.filename.to_s, url_for(f)
-              = f.label :files
-              = f.file_field :files, multiple: true
-            p
-              = f.label :author_id, hidden: true
-              - if user_signed_in?
-                = f.text_field :author_id, value: current_user.id, hidden: true
-              - else
-                = f.text_field :author_id, value: 'empty', hidden: true
-            p
-              = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
-            p
-              = f.submit 'Save'
-        - if current_user&.not_author_of?(question)
-            p class = "rating-question" Rating: #{question.show_rating}
+      = form_with model: question, class: 'hidden', remote: true, html: { id: "edit-question-#{question.id}"} do |f|
+        p
+          = f.label :title, 'Your title'
+          = f.text_area :title
+        p
+          = f.label :body, 'Your body'
+          = f.text_area :body
+        p
+          - if question.files.attached?
+            - question.files.each do |f|
+              p = link_to f.filename.to_s, url_for(f)
+          = f.label :files
+          = f.file_field :files, multiple: true
+        p
+          = f.label :author_id, hidden: true
+          - if user_signed_in?
+            = f.text_field :author_id, value: current_user.id, hidden: true
+          - else
+            = f.text_field :author_id, value: 'empty', hidden: true
+        p
+          = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
+        p
+          = f.submit 'Save'
+    - if current_user&.not_author_of?(question)
+        p class = "rating-question" Rating: #{question.show_rating}
 
-            p = link_to 'Like', rate_path(id: question.id, liked_type: 'question', liked_params: { rating: +1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
-            p = link_to 'Dislike', rate_path(id: question.id, liked_type: 'question', liked_params: { rating: -1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
+        p = link_to 'Like', rate_path(id: question.id, liked_type: 'question', liked_params: { rating: +1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
+        p = link_to 'Dislike', rate_path(id: question.id, liked_type: 'question', liked_params: { rating: -1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
