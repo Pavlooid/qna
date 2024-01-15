@@ -13,6 +13,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.links.build
+    gon.current_user_id = current_user&.id
   end
 
   def new 

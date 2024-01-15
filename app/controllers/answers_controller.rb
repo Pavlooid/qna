@@ -4,6 +4,8 @@ class AnswersController < ApplicationController
   before_action :find_question, only: %i[create]
   before_action :find_answer, only: %i[edit destroy update best]
 
+  after_action :publish_answer, only: [:create]
+
   def show; end
 
   def index
@@ -45,6 +47,15 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def publish_answer
+    return if @answer.errors.any?
+
+    ActionCable.server.broadcast(
+      "questions/#{@answer.question_id}",
+      answer: @answer
+    )
+  end
 
   def find_question
     @question = Question.find(params[:question_id])
