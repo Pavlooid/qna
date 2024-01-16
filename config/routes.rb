@@ -2,8 +2,12 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :questions do
-    resources :answers, shallow: true
+    resources :answers, shallow: true do
+      resources :comments, shallow: true, defaults: { commentable: 'answer' }
+    end
+    resources :comments, shallow: true, defaults: { commentable: 'question' }
   end
+
 
   resources :links, only: :destroy
   resources :rewards, only: :index

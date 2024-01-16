@@ -1,15 +1,15 @@
 import consumer from "./consumer"
 
-consumer.subscriptions.create("CommentsChannel", {
-  connected() {
-    // Called when the subscription is ready for use on the server
-  },
+$(document).on('turbolinks:load', function(){
+  let path = $(location).attr('pathname').split('/')
 
-  disconnected() {
-    // Called when the subscription has been terminated by the server
-  },
+  consumer.subscriptions.create({ channel: 'CommentsChannel' }, {
+    connected: function(){
+      return this.perform('follow', {question_id: path[2] })
+    },
 
-  received(data) {
-    // Called when there's incoming data on the websocket for this channel
-  }
-});
+    received(data){
+      $('.comments-'+ data.comment.commentable_id).append('<p>' + data.comment.body + '</p>')
+    }
+  })
+})

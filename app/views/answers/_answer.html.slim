@@ -1,5 +1,5 @@
 div(id="answer_#{answer.id}")
-p = answer.body
+p = "Answer - #{answer.body}"
 
 .links
   - if answer.links.present?
@@ -13,6 +13,11 @@ p = answer.body
             li = link_to link.name, link.url
           - if current_user.author_of?(answer)
             p = link_to 'Delete link', link_path(link), method: :delete, remote: true
+
+.comments
+  div class = "comments-#{answer.id}"
+    p Answer comments:
+    = render partial: 'comments/comments', locals: { resource: answer}
 
 - if answer.files.attached?
   -answer.files.each do |f|

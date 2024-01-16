@@ -1,9 +1,5 @@
 class CommentsChannel < ApplicationCable::Channel
-  def subscribed
-    # stream_from "some_channel"
-  end
-
-  def unsubscribed
-    # Any cleanup needed when channel is unsubscribed
+  def follow(data)
+    stream_from "comments/#{data['question_id']}"
   end
 end
