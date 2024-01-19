@@ -11,6 +11,10 @@ class User < ApplicationRecord
   has_many :likes, dependent: :destroy, as: :likeable
   has_many :comments, dependent: :destroy
 
+  def self.find_for_oauth(auth)
+
+  end
+
   def author_of?(resource)
     resource.author_id == self.id
   end
