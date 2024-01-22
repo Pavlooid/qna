@@ -50,6 +50,15 @@ feature 'User can register', %q{
         expect(page).to have_content 'Successfully authenticated from Vkontakte account.'
       end
 
+      scenario "with no email" do
+        mock_auth_hash('vkontakte', email: nil)
+        click_button 'Sign in with Vkontakte'
+
+        fill_in 'Email', with: '123@mail.ru'
+        click_on 'Sign up', match: :first
+        expect(page).to have_content 'Welcome! You have signed up successfully.'
+      end
+
       scenario 'can handle authentication error with Vkontakte' do
         invalid_mock('vkontakte')
         click_button "Sign in with Vkontakte"
