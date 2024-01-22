@@ -12,16 +12,16 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :authorizations, dependent: :destroy
 
-  def self.find_for_oauth(auth)
-    FindForOauthService.new(auth).call
-  end
-
   def author_of?(resource)
     resource.author_id == self.id
   end
 
   def not_author_of?(resource)
     !author_of?(resource)
+  end
+
+  def self.find_for_oauth(auth)
+    FindForOauthService.new(auth).call
   end
 
   def self.new_with_session(params, session)

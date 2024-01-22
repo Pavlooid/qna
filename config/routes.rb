@@ -8,7 +8,6 @@ Rails.application.routes.draw do
     resources :comments, shallow: true, defaults: { commentable: 'question' }
   end
 
-
   resources :links, only: :destroy
   resources :rewards, only: :index
 
