@@ -23,4 +23,14 @@ class User < ApplicationRecord
   def not_author_of?(resource)
     !author_of?(resource)
   end
+
+  def self.new_with_session(params, session)
+    super.tap do |user|
+      if data = session["omniauth"]
+        new_password = Devise.friendly_token[0, 20]
+        user.password = new_password
+        user.password_confirmation = new_password
+      end
+    end
+  end
 end

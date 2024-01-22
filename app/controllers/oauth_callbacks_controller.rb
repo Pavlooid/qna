@@ -16,7 +16,9 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
       sign_in_and_redirect @user, event: :authentication
       set_flash_message(:notice, :success, kind: provider) if is_navigational_format?
     else
-      redirect_to root_path, alert: 'Something went wrong'
+      session["omniauth"] = request.env['omniauth.auth']
+      flash.now[:notice] = "Please enter your email"
+      redirect_to new_user_registration_url
     end
   end
 end
