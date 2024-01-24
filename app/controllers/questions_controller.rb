@@ -5,6 +5,8 @@ class QuestionsController < ApplicationController
 
   after_action :publish_question, only: [:create]
 
+  authorize_resource
+
   def index
     @questions = Question.all
     gon.current_user_id = current_user&.id
@@ -16,7 +18,7 @@ class QuestionsController < ApplicationController
     gon.current_user_id = current_user&.id
   end
 
-  def new 
+  def new
     @question = current_user.questions.new
     @question.links.build
     @question.reward = Reward.new
