@@ -11,7 +11,7 @@ p = "Answer - #{answer.body}"
             li = link_to link.url
           - else
             li = link_to link.name, link.url
-          - if current_user.author_of?(answer)
+          - if can?(:destroy, link)
             p = link_to 'Delete link', link_path(link), method: :delete, remote: true
 
 .comments
@@ -22,14 +22,14 @@ p = "Answer - #{answer.body}"
 - if answer.files.attached?
   -answer.files.each do |f|
     p = link_to f.filename.to_s, url_for(f)
-    - if current_user&.author_of?(answer)
+    - if can?(:destroy, answer)
       p = button_to 'Delete file', purge_file_path(f), method: :delete
 - if answer.best?(answer.question)
   p = 'Best answer!'
-- elsif current_user&.author_of?(answer)
+- elsif can?(:best, answer)
   = link_to 'Best', answer_best_path(answer, id: answer.id), method: :get, remote: true
 
-- if current_user&.author_of?(answer)
+- if can?(:edit, answer)
   p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
   = form_with model: answer, class: 'hidden', remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
@@ -49,7 +49,7 @@ p = "Answer - #{answer.body}"
     = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
     = f.submit 'Save'
 
-- if current_user&.author_of?(answer)
+- if can?(:destroy, answer)
   p = link_to 'Delete', answer_path(answer), method: :delete, remote: true
 - else
   p class = "rating-answer" Rating: #{answer.show_rating}

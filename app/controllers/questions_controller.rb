@@ -5,6 +5,8 @@ class QuestionsController < ApplicationController
 
   after_action :publish_question, only: [:create]
 
+  authorize_resource
+
   def index
     @questions = Question.all
     gon.current_user_id = current_user&.id
@@ -16,7 +18,7 @@ class QuestionsController < ApplicationController
     gon.current_user_id = current_user&.id
   end
 
-  def new 
+  def new
     @question = current_user.questions.new
     @question.links.build
     @question.reward = Reward.new
@@ -35,16 +37,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(@question)
-      @question.update(question_params)
-      @questions = Question.all
-    else
-      redirect_to questions_path, alert: 'You do not have permisson!'
-    end
+    @question.update(question_params)
+    @questions = Question.all
   end
 
   def destroy
-    @question.destroy if current_user.author_of?(@question)
+    @question.destroy
   end
 
   private
