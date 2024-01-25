@@ -1,6 +1,8 @@
 class LikesController < ApplicationController
   include Liked
 
+  authorize_resource
+
   def like
     if @resource_liked.likes.where(user_id: @author_like).exists?
       @like = @resource_liked.likes.where("user_id = #{@author_like}")
