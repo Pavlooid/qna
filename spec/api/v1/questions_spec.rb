@@ -6,7 +6,7 @@ describe 'Questions API', type: :request do
 
   describe 'GET /api/v1/questions' do
     let(:api_path) { '/api/v1/questions' }
-    
+
     it_behaves_like 'API Authorizable' do
       let(:method) { :get }
     end
@@ -30,10 +30,10 @@ describe 'Questions API', type: :request do
         expect(json['questions'].size).to eq 2
       end
 
-      it 'returns all public fields' do
-        %w[id title body created_at updated_at].each do |attr|
-          expect(question_response[attr]).to eq questions.first.send(attr).as_json
-        end
+      it_behaves_like 'providable fields' do
+        let(:all_fields) { %w[id title body created_at updated_at] }
+        let(:object) { question }
+        let(:object_response) { question_response}
       end
 
       it 'contains user object' do
@@ -59,5 +59,21 @@ describe 'Questions API', type: :request do
         end
       end
     end
+  end
+
+  describe 'GET /api/v1/questions/:id' do
+    # отдельный вопрос
+  end
+
+  describe 'POST /api/v1/questions' do
+    # создать вопроса
+  end
+
+  describe 'PATCH /api/v1/questions/:id' do
+    # обновление вопроса
+  end
+
+  describe 'DELETE /api/v1/questions/:id' do
+    # создать вопроса
   end
 end
