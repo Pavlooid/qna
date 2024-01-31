@@ -36,5 +36,6 @@ class Ability
     end
     can :destroy, Link, linkable: { author_id: user.id }
     can :best, Answer, question: { author_id: user.id }
+    can :me, User
   end
 end
