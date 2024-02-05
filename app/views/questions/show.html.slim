@@ -27,6 +27,10 @@ p = "Question body -  #{@question.body}"
     p Question comments:
     = render partial: 'comments/comments', locals: { resource: @question}
 
+.subscribes
+  - if can? :create, Subscribe
+    = render 'subscribes/subscribe', question: @question
+
 .answers
   = render @question.answers
 
