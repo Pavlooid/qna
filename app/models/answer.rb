@@ -12,7 +12,13 @@ class Answer < ApplicationRecord
 
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
+  after_create :send_subscribe
+
   def best?(resource)
     resource.best_answer_id == self.id
+  end
+
+  def send_subscribe
+    SubscribeJob.perform_later(self)
   end
 end
