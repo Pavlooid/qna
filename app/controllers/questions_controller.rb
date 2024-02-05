@@ -1,6 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :find_question, only: %i[show edit update destroy]  
   before_action :authenticate_user!, except: %i[index show]
+  before_action :set_subscribe, only: %i[show update]
 
   after_action :publish_question, only: [:create]
 
@@ -61,5 +62,9 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, :author_id, files: [], links_attributes: [:name, :url, :_destroy], reward_attributes: [:title, :file])
+  end
+
+  def set_subscribe
+    @subscribe ||= current_user&.subscribes&.find_by(question: @question)
   end
 end

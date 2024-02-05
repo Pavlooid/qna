@@ -4,7 +4,7 @@ class SubscribesController < ApplicationController
   authorize_resource
 
   def create
-    @question = Question.with_attached_files.find(params[:id])
+    @question = Question.with_attached_files.find(params[:question_id])
     @subscribe = @question.subscribes.create(user: current_user)
   end
 

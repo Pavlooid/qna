@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks', registrations: 'oauth_registrations' }
 
   resources :questions do
+    resources :subscribes, only: %i[create destroy], shallow: true
     resources :answers, shallow: true do
       resources :comments, shallow: true, defaults: { commentable: 'answer' }
     end
@@ -22,7 +23,6 @@ Rails.application.routes.draw do
       end
 
       resources :questions, only: %i[index show create update destroy] do
-        resources :subscribes, only: %i[create destroy], shallow: true
         resources :answers, only: %i[index show create], shallow: true
       end
     end
