@@ -51,8 +51,8 @@ gem 'oj'
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'whenever', require: false
+gem 'thinking-sphinx', '~> 5.0'
 gem 'mysql2', :platform => :ruby
-gem 'thinking-sphinx'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
