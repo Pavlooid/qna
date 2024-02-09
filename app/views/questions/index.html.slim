@@ -1,13 +1,16 @@
-= render 'shared/nav'
+.search
+  = render 'search/search'
 
--if can?(:create, Question)
-  p = link_to 'Ask question', new_question_path
+  = render 'shared/nav'
 
-- if @questions.any?
-  .questions
-   = render @questions
+  -if can?(:create, Question)
+    p = link_to 'Ask question', new_question_path
 
-  .question-errors
-    = render 'shared/errors', resource: @question
-- else
-  p = 'No questions created yet.'
+  - if @questions.any?
+    .questions
+     = render @questions
+
+    .question-errors
+      = render 'shared/errors', resource: @question
+  - else
+    p = 'No questions created yet.'

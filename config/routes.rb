@@ -36,6 +36,8 @@ Rails.application.routes.draw do
   get 'answer_best', to: 'answers#best'
   get 'my_rewards', to: 'rewards#index'
 
+  get '/search', to: 'search#search'
+
   post 'like', to: 'likes#like', as: 'rate'
 
   delete 'files/:id/purge', to: 'files#purge', as: 'purge_file'
