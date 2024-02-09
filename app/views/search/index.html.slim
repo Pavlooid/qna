@@ -2,29 +2,6 @@
   = render 'search/search'  
 
 h4 Results for "#{@query}" search:
-- if @results.present?
-  - @results.each do |result|
-    .card.mb-3
-    .card-body
-    - if result.class == Question
-      p.card-text.text-muted Title: #{result.title}
-      p.card-text.text-muted Body: #{result.body}
-      p.card-text.text-muted Posted by: #{result.author.email}
-      p.card-text.text-muted Question created at: #{result.created_at.strftime('%B %d, %Y')}
-    - elsif result.class == Answer
-      p.card-text.text-muted Body: #{result.body}
-      p.card-text.text-muted Answer to question: #{result.question.title}
-      p.card-text.text-muted Posted by: #{result.author.email}
-      p.card-text.text-muted Answer created at: #{result.created_at.strftime('%B %d, %Y')}
-    - elsif result.class == Comment
-      p.card-text.text-muted Body: #{result.body}
-      p.card-text.text-muted Comment to #{result.commentable_type}: #{result.commentable.body}
-      p.card-text.text-muted Posted by: #{result.user.email}
-      p.card-text.text-muted Comment created at: #{result.created_at.strftime('%B %d, %Y')}
-    - elsif result.class == User
-      p.card-text.text-muted Email: #{result.email} 
-      p.card-text.text-muted Account created at: #{result.created_at.strftime('%B %d, %Y')}
-- else
-  p No results found for "#{@query}"
+  = render 'search/result'
 
 = button_to 'To questions', questions_path, :method => :get
