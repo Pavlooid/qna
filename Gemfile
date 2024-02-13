@@ -52,7 +52,7 @@ gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'whenever', require: false
 gem 'thinking-sphinx', '~> 5.0'
-gem 'mysql2', :platform => :ruby
+gem 'mysql2'
 gem 'mini_racer'
 
 group :development, :test do
