@@ -53,7 +53,7 @@ gem 'sinatra', require: false
 gem 'whenever', require: false
 gem 'thinking-sphinx', '~> 5.0'
 gem 'mysql2'
-gem 'mini_racer'
+gem 'mini_racer', '=0.6.1'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
