@@ -2,6 +2,7 @@
   = render 'search/search'  
 
 h4 Results for "#{@query}" search:
-  = render 'search/result'
+
+= render 'search/result'
 
 = button_to 'To questions', questions_path, :method => :get

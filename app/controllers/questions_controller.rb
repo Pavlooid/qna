@@ -52,7 +52,7 @@ class QuestionsController < ApplicationController
 
     ActionCable.server.broadcast(
       'questions',
-      question: @question
+      { question: @question }
     )
   end
 

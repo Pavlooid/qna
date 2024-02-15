@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
 
     ActionCable.server.broadcast(
       "comments/#{question_id}",
-      comment: @comment
+      { comment: @comment }
     )
   end
 

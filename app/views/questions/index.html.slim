@@ -1,7 +1,7 @@
+= render 'shared/nav'
+
 .search
   = render 'search/search'
-
-  = render 'shared/nav'
 
   -if can?(:create, Question)
     p = link_to 'Ask question', new_question_path

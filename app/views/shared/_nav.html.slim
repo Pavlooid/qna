@@ -1,2 +1,18 @@
-- if user_signed_in?
- = link_to 'Sign out', destroy_user_session_path, :method => :delete
+div class="text-center col"
+  h1 Questions and Answers
+
+div class="collapse navbar-collapse col-5" id="navbarSupportedContent"
+  - if user_signed_in?
+    ul class="navbar-nav me-auto mb-2 gap-2"
+      li class="nav-item"
+        = link_to "Ask question", new_question_path
+      li class="nav-item"
+        = link_to "Your Rewards", my_rewards_path
+      li class="nav-item"
+        = link_to "Sign out", destroy_user_session_path
+  - else
+    ul class="navbar-nav me-auto mb-2 gap-2"
+      li class="nav-item"
+        = link_to "Sign in", new_user_session_path, class: 'btn btn-outline-primary'
+      li class="nav-item"
+        = link_to "Register", new_user_registration_path, class: 'btn btn-outline-success'
