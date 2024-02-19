@@ -3,10 +3,6 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
     sign_in_with_provider('Github')
   end
 
-  def vkontakte
-    sign_in_with_provider('Vkontakte')
-  end
-
   private
 
   def sign_in_with_provider(provider)

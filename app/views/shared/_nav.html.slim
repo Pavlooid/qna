@@ -9,7 +9,7 @@ div class="collapse navbar-collapse col-5" id="navbarSupportedContent"
       li class="nav-item"
         = link_to "Your Rewards", my_rewards_path
       li class="nav-item"
-        = link_to "Sign out", destroy_user_session_path
+        = link_to "Sign out", destroy_user_session_path, :method => :delete
   - else
     ul class="navbar-nav me-auto mb-2 gap-2"
       li class="nav-item"

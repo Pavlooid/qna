@@ -54,5 +54,6 @@ p = "Answer - #{answer.body}"
 - else
   p class = "rating-answer" Rating: #{answer.show_rating}
 
+- if user_signed_in?
   p = link_to 'Like', rate_path(id: answer.id, liked_type: 'answer', liked_params: { rating: +1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
   p = link_to 'Dislike', rate_path(id: answer.id, liked_type: 'answer', liked_params: { rating: -1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
