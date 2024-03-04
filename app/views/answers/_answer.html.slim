@@ -1,59 +1,60 @@
-div(id="answer_#{answer.id}")
-p = "Answer - #{answer.body}"
+- cache answer do
+  div(id="answer_#{answer.id}")
+  p = "Answer - #{answer.body}"
 
-.links
-  - if answer.links.present?
-    p Links:
-    ul
-      - answer.links.each do |link|
-        div(id="link_#{link.id}")
-          - if link.gist_url?
-            li = link_to link.url
-          - else
-            li = link_to link.name, link.url
-          - if can?(:destroy, link)
-            p = link_to 'Delete link', link_path(link), method: :delete, remote: true
+  .links
+    - if answer.links.present?
+      p Links:
+      ul
+        - answer.links.each do |link|
+          div(id="link_#{link.id}")
+            - if link.gist_url?
+              li = link_to link.url
+            - else
+              li = link_to link.name, link.url
+            - if can?(:destroy, link)
+              p = link_to 'Delete link', link_path(link), method: :delete, remote: true
 
-.comments
-  div class = "comments-#{answer.id}"
-    p Answer comments:
-    = render partial: 'comments/comments', locals: { resource: answer}
+  .comments
+    div class = "comments-#{answer.id}"
+      p Answer comments:
+      = render partial: 'comments/comments', locals: { resource: answer}
 
-- if answer.files.attached?
-  -answer.files.each do |f|
-    p = link_to f.filename.to_s, url_for(f)
-    - if can?(:destroy, answer)
-      p = button_to 'Delete file', purge_file_path(f), method: :delete
-- if answer.best?(answer.question)
-  p = 'Best answer!'
-- elsif can?(:best, answer)
-  = link_to 'Best', answer_best_path(answer, id: answer.id), method: :get, remote: true
+  - if answer.files.attached?
+    -answer.files.each do |f|
+      p = link_to f.filename.to_s, url_for(f)
+      - if can?(:destroy, answer)
+        p = button_to 'Delete file', purge_file_path(f), method: :delete
+  - if answer.best?(answer.question)
+    p = 'Best answer!'
+  - elsif can?(:best, answer)
+    = link_to 'Best', answer_best_path(answer, id: answer.id), method: :get, remote: true
 
-- if can?(:edit, answer)
-  p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+  - if can?(:edit, answer)
+    p = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
-  = form_with model: answer, class: 'hidden', remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
-    = f.label :body, 'Your answer'
-    = f.text_area :body
-    - if answer.files.attached?
-      - answer.files.each do |f|
-        p = link_to f.filename.to_s, url_for(f)
-    = f.label :files
-    = f.file_field :files, multiple: true
-    = f.label :author_id, hidden: true
-    - if user_signed_in?
-      = f.text_field :author_id, value: current_user.id, hidden: true
-    - else
-      = f.text_field :author_id, value: 'empty', hidden: true
-    = f.fields_for :links do |l|
-    = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
-    = f.submit 'Save'
+    = form_with model: answer, class: 'hidden', remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+      = f.label :body, 'Your answer'
+      = f.text_area :body
+      - if answer.files.attached?
+        - answer.files.each do |f|
+          p = link_to f.filename.to_s, url_for(f)
+      = f.label :files
+      = f.file_field :files, multiple: true
+      = f.label :author_id, hidden: true
+      - if user_signed_in?
+        = f.text_field :author_id, value: current_user.id, hidden: true
+      - else
+        = f.text_field :author_id, value: 'empty', hidden: true
+      = f.fields_for :links do |l|
+      = link_to_add_association 'add link', f, :links, partial: 'questions/link_fields'
+      = f.submit 'Save'
 
-- if can?(:destroy, answer)
-  p = link_to 'Delete', answer_path(answer), method: :delete, remote: true
-- else
-  p class = "rating-answer" Rating: #{answer.show_rating}
+  - if can?(:destroy, answer)
+    p = link_to 'Delete', answer_path(answer), method: :delete, remote: true
+  - else
+    p class = "rating-answer" Rating: #{answer.show_rating}
 
-- if user_signed_in?
-  p = link_to 'Like', rate_path(id: answer.id, liked_type: 'answer', liked_params: { rating: +1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
-  p = link_to 'Dislike', rate_path(id: answer.id, liked_type: 'answer', liked_params: { rating: -1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
+  - if user_signed_in?
+    p = link_to 'Like', rate_path(id: answer.id, liked_type: 'answer', liked_params: { rating: +1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
+    p = link_to 'Dislike', rate_path(id: answer.id, liked_type: 'answer', liked_params: { rating: -1, user_id: current_user.id }), method: :post, remote: true, data: { type: :json }
