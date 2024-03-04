@@ -1,58 +1,60 @@
-h1 = "Question title - #{@question.title}"
-p = "Question body -  #{@question.body}"
+- cache @question do
+  h3 = "Question title - #{@question.title}"
+  p = "Question body -  #{@question.body}"
 
-- if @question.files.attached?
-  - @question.files.each do |f|
-    p = link_to f.filename.to_s, url_for(f)
+  - if @question.files.attached?
+    - @question.files.each do |f|
+      p = link_to f.filename.to_s, url_for(f)
 
-.links
-  - if @question.links.present?
-    p Links:
-    ul
-      - @question.links.each do |link|
-        div(id="link_#{link.id}")
-          - if link.gist_url?
-            li = link_to link.url
-          - else
-            li = link_to link.name, link.url
-          - if can?(:destroy, link)
-            p = link_to 'Delete link', link_path(link), method: :delete, remote: true
+  .links
+    - if @question.links.present?
+      p Links:
+      ul
+        - @question.links.each do |link|
+          div(id="link_#{link.id}")
+            - if link.gist_url?
+              li = link_to link.url
+            - else
+              li = link_to link.name, link.url
+            - if can?(:destroy, link)
+              p = link_to 'Delete link', link_path(link), method: :delete, remote: true
 
-.reward
-  - if @question.reward.present?
-    = image_tag(@question.reward.file, size: '100x100')
+  .reward
+    - if @question.reward.present?
+      = image_tag(@question.reward.file, size: '100x100')
 
-.comments
-  div class = "comments-#{@question.id}"
-    p Question comments:
-    = render partial: 'comments/comments', locals: { resource: @question}
+  .comments
+    div class = "comments-#{@question.id}"
+      p Question comments:
+      = render partial: 'comments/comments', locals: { resource: @question}
 
-.subscribes
-  - if can? :create, Subscribe
-    = render 'subscribes/subscribe', question: @question
+  .subscribes
+    - if can? :create, Subscribe
+      = render 'subscribes/subscribe', question: @question
 
-.answers
-  = render @question.answers
+  .answers
+    = render @question.answers
 
-.answer-errors
-  = render 'shared/errors', resource: @answer
-- if user_signed_in?
-  | Create new answer
-  = form_with model: [@question, @answer], class: 'new-answer', remote: true, data: { type: :json } do |f|
-    p
-      = f.label :body, 'Add answer'
-      = f.text_area :body
-    p
-      = f.label :author_id, hidden: true
-      = f.text_field :author_id, value: current_user.id, hidden: true
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true, direct_upload: true
-    p Links
-    p
-    .links
-      = f.fields_for :links do |link|
-        = render 'link_fields', f: link
-      .links-url
-        = link_to_add_association 'add link', f, :links, class: "btn btn-info"
-    p = f.submit 'Answer'
+  .answer-errors
+    = render 'shared/errors', resource: @answer
+  - if user_signed_in?
+    | Create new answer
+    - cache @answer do
+      = form_with model: [@question, @answer], class: 'new-answer', remote: true, data: { type: :json } do |f|
+        p
+          = f.label :body, 'Add answer'
+          = f.text_area :body
+        p
+          = f.label :author_id, hidden: true
+          = f.text_field :author_id, value: current_user.id, hidden: true
+        p
+          = f.label :files
+          = f.file_field :files, multiple: true, direct_upload: true
+        p Links
+        p
+        .links
+          = f.fields_for :links do |link|
+            = render 'link_fields', f: link
+          .links-url
+            = link_to_add_association 'add link', f, :links, class: "btn btn-info"
+        p = f.submit 'Answer'

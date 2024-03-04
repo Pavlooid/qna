@@ -1,5 +1,6 @@
 - if resource&.comments.any?
 - resource.comments.each do |comment|
-  p = comment.body
+  - cache comment do
+    p = comment.body
 
 = render partial: 'comments/form', locals: { commentable: resource }
